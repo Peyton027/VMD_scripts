@@ -32,10 +32,9 @@ puts "Number of trajectory frames: $nframes"
 set sel [atomselect $mol "protein"]
 
 for {set i 0} {$i < $nframes} {incr i} {
-
     $sel frame $i
 
-    set filename [format "pdb_frames/frame_%05d.pdb" $i]
+    set filename [format "pdb_frames_a1/amber1_frame_%06d.pdb" $i]
 
     $sel writepdb $filename
 
@@ -44,4 +43,4 @@ for {set i 0} {$i < $nframes} {incr i} {
 
 $sel delete
 
-puts "Finished exporting all protein frames."
+puts "Finished exporting amber1."
