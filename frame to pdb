@@ -1,0 +1,47 @@
+# Get current molecule
+set mol [molinfo top]
+
+# Assign separate chain IDs to the two protein fragments
+
+set f0 [atomselect $mol "protein and fragment 0"]
+set f1 [atomselect $mol "protein and fragment 1"]
+
+$f0 set chain A
+$f1 set chain B
+
+$f0 delete
+$f1 delete
+
+# Check chain IDs
+
+set check [atomselect $mol "protein"]
+puts "Protein chains:"
+puts [lsort -unique [$check get chain]]
+$check delete
+
+
+# Create output directory
+
+file mkdir pdb_frames
+
+
+# Export every frame as protein-only PDB
+set nframes [molinfo $mol get numframes]
+puts "Number of trajectory frames: $nframes"
+
+set sel [atomselect $mol "protein"]
+
+for {set i 0} {$i < $nframes} {incr i} {
+
+    $sel frame $i
+
+    set filename [format "pdb_frames/frame_%05d.pdb" $i]
+
+    $sel writepdb $filename
+
+    puts "Saved $filename"
+}
+
+$sel delete
+
+puts "Finished exporting all protein frames."
